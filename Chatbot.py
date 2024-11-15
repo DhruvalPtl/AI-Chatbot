@@ -55,10 +55,13 @@ with st.sidebar:
             # JSON download button
             
             def content_to_dict(content_obj):
+                if isinstance(content_obj, dict):
+                    return content_obj  
                 return {
                     "role": content_obj.role,
-                    "parts": [part.text for part in content_obj.parts]  # Extract text from each Part
+                    "parts": [part.text for part in content_obj.parts],
                 }
+
             json_data = json.dumps([content_to_dict(msg) for msg in st.session_state["messages"]], indent=4)
 
             # json_data = json.dumps(st.session_state["messages"], indent=4)
@@ -70,7 +73,7 @@ with st.sidebar:
             st.download_button("As CSV Format", csv_data, file_name="chat_history.csv", mime="text/csv")
 
     if st.button("Clear Chat"):
-        st.session_state["messages"] = [{"role": "Assistant", "parts": "How can I help you?"}]
+        st.session_state["messages"] = [protos.Content(parts=[protos.Part(text="How can I help you?")], role="model")]
         st.rerun() 
         
 # Set up generation configuration
