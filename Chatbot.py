@@ -1,7 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
 from google.generativeai import protos
-import os
 import json
 import pandas as pd
 
