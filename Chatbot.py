@@ -101,30 +101,33 @@ for msg in st.session_state.messages:
     
 if prompt := st.chat_input():
     # Append user input as a Content object with Part instance
-    user_message = protos.Content(
-        parts=[protos.Part(text=prompt)],
-        role="user"
-    )
-    st.session_state["messages"].append(user_message)
-    st.chat_message("user").write(prompt)
-    
-    if "chat" in st.session_state:
-        # Concatenate messages into a single string
-        full_prompt = "\n".join([
-            "".join([part.text for part in msg.parts])
-            for msg in st.session_state.messages
-        ])
-        full_prompt += "\n" + prompt
-        
-        # Send the user message and get a response
-        response = st.session_state.chat.send_message(full_prompt)
-        
-        # Create the assistant's response as a Content object with Part instance
-        model_message = protos.Content(
-            parts=[protos.Part(text=response.text)],
-            role="model"
+    if prompt and user_api_key:
+        user_message = protos.Content(
+            parts=[protos.Part(text=prompt)],
+            role="user"
         )
-        st.session_state["messages"].append(model_message)
-        st.chat_message("assistant").write(response.text)
+        st.session_state["messages"].append(user_message)
+        st.chat_message("user").write(prompt)
+        
+        if "chat" in st.session_state:
+            # Concatenate messages into a single string
+            full_prompt = "\n".join([
+                "".join([part.text for part in msg.parts])
+                for msg in st.session_state.messages
+            ])
+            full_prompt += "\n" + prompt
+            
+            # Send the user message and get a response
+            response = st.session_state.chat.send_message(full_prompt)
+            
+            # Create the assistant's response as a Content object with Part instance
+            model_message = protos.Content(
+                parts=[protos.Part(text=response.text)],
+                role="model"
+            )
+            st.session_state["messages"].append(model_message)
+            st.chat_message("assistant").write(response.text)
+        else:
+            st.error("Failed to start chat message")
     else:
-        st.error("Failed to start chat message")
+        st.error("Please provide a API key in sidebar")
