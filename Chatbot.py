@@ -133,4 +133,4 @@ if prompt := st.chat_input():
         else:
             st.error("Failed to start chat message")
     else:
-        st.error("Please provide a API key in sidebar")
+        st.error("Please provide a API key in left sidebar")
