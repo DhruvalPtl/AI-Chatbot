@@ -4,6 +4,8 @@ from google.generativeai import protos
 import json
 import pandas as pd
 
+api_key = st.secrets["API_KEY"]
+
 # Initialize messages in session state
 if "messages" not in st.session_state:
     # Create the initial assistant message with Part instances
@@ -28,6 +30,9 @@ with st.sidebar:
     user_api_key = st.text_input("Enter your Gemini API key",type="password")
     if user_api_key:
         genai.configure(api_key=user_api_key)
+    elif api_key:
+        genai.configure(api_key=api_key)
+        st.info("✅ API key is provided by developer")
     else:
         st.error("Please enter your API key")
         # st.info("✅ API key is provided by developer")
