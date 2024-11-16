@@ -109,7 +109,7 @@ for msg in st.session_state.messages:
     
 if prompt := st.chat_input():
     # Append user input as a Content object with Part instance
-    if prompt and user_api_key:
+    if prompt and (user_api_key or api_key):
         user_message = protos.Content(
             parts=[protos.Part(text=prompt)],
             role="user"
