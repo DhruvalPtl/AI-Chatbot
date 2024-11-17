@@ -5,6 +5,9 @@
 		},
 		{
 			"path": ".."
+		},
+		{
+			"path": "../../project-6"
 		}
 	],
 	"settings": {}
