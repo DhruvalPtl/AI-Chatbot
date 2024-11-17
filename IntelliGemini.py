@@ -45,7 +45,7 @@ with st.sidebar:
     else:
         tools = None
         
-    model_name = st.selectbox("Choose a gemini Model",("gemini-1.5-flash","gemini-1.5-pro-002","gemini-1.5-pro","gemini-1.5-flash-002","gemini-1.5-flash-8b"))
+    model_name = st.selectbox("Choose a gemini Model",("gemini-1.5-flash","gemini-1.5-flash-8b","gemini-1.5-pro"))
     with st.expander("Output Control Parameter"):
         temp = st.slider("🌡Temperature",0.0,2.0,1.0,0.05)
         top_p = st.slider("Top P",0.0,1.0,.95,.05)
@@ -116,26 +116,33 @@ if prompt := st.chat_input():
         )
         st.session_state["messages"].append(user_message)
         st.chat_message("user").write(prompt)
-        
+               
         if "chat" in st.session_state:
-            # Concatenate messages into a single string
-            full_prompt = "\n".join([
-                "".join([part.text for part in msg.parts])
-                for msg in st.session_state.messages
-            ])
-            full_prompt += "\n" + prompt
+            try:
+                # Concatenate messages into a single string
+                full_prompt = "\n".join([
+                    "".join([part.text for part in msg.parts])
+                    for msg in st.session_state.messages
+                ])
+                full_prompt += "\n" + prompt
+                
+                # Send the user message and get a response
+                response = st.session_state.chat.send_message(full_prompt)
+                
+                # Create the assistant's response as a Content object with Part instance
+                model_message = protos.Content(
+                    parts=[protos.Part(text=response.text)],
+                    role="model"
+                )
+                st.session_state["messages"].append(model_message)
+                st.chat_message("assistant").write(response.text)
             
-            # Send the user message and get a response
-            response = st.session_state.chat.send_message(full_prompt)
-            
-            # Create the assistant's response as a Content object with Part instance
-            model_message = protos.Content(
-                parts=[protos.Part(text=response.text)],
-                role="model"
-            )
-            st.session_state["messages"].append(model_message)
-            st.chat_message("assistant").write(response.text)
+            except Exception as e:
+                if "429" in str(e):
+                    st.warning("Quota exceeded! Please wait a few minutes or enter your own API key in the sidebar.")
+                else:
+                    st.error(f"An error occurred: {e}")
         else:
-            st.error("Failed to start chat message")
+                st.error("Failed to start chat message")
     else:
         st.error("Please provide a API key in left sidebar")
