@@ -1,14 +1,10 @@
 {
-	"folders": [
-		{
-			"path": "../.."
-		},
-		{
-			"path": ".."
-		},
-		{
-			"path": "../../project-6"
-		}
-	],
-	"settings": {}
+    "folders": [
+        {
+            "path": "../.."
+        },
+        {
+            "path": "../../project-6"
+        }
+    ]
 }
