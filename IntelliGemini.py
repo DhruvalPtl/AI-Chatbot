@@ -19,20 +19,20 @@ if "messages" not in st.session_state:
 with st.sidebar:
     st.markdown("## IntelliGemini")
     st.markdown("""
-        **Welcome to the IntelliGemini Chat Interface!**
+    **Welcome to IntelliGemini!**
 
-        This app allows you to various Gemini language models.
-        Use the options below to configure model settings, manage chat history, and download your chat.
-
-        *Happy chatting!*
+    Explore Gemini language models, adjust settings, and manage chat history.  
+    *Happy chatting!*
     """)
-    
+
     user_api_key = st.text_input("Enter your Gemini API key",type="password")
     if user_api_key:
         genai.configure(api_key=user_api_key)
     elif api_key:
         genai.configure(api_key=api_key)
-        st.info("✅ API key is provided by developer")
+        st.info(f"✅ API key is provided by developer\n\n"
+                f"Requests per minute for Flash is 5 and Pro is 2"
+                )
     else:
         st.error("Please enter your API key")
         # st.info("✅ API key is provided by developer")
