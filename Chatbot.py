@@ -17,9 +17,9 @@ if "messages" not in st.session_state:
 
 # Sidebar options with download buttons
 with st.sidebar:
-    st.markdown("## Gemini API")
+    st.markdown("## IntelliGemini")
     st.markdown("""
-        **Welcome to the Gemini API Chat Interface!**
+        **Welcome to the IntelliGemini Chat Interface!**
 
         This app allows you to various Gemini language models.
         Use the options below to configure model settings, manage chat history, and download your chat.
@@ -98,7 +98,7 @@ try:
 except Exception as e:
     st.error(f"Failed to initialize chat: {e}")
 
-st.title("AI Chatbot")
+st.title("IntelliGemini")
 st.caption("A Chatbot powered by Gemini")
 
 # Display chat messages
