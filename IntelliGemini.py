@@ -9,11 +9,11 @@ api_key = st.secrets["API_KEY"]
 # Initialize messages in session state
 if "messages" not in st.session_state:
     # Create the initial assistant message with Part instances
-    initial_message = protos.Content(
-        parts=[protos.Part(text="How can I help you?")],
-        role="model"
-    )
-    st.session_state["messages"] = [initial_message]
+    #initial_message = protos.Content(
+    #    parts=[protos.Part(text="How can I help you?")],
+    #    role="model"
+    #)
+    st.session_state["messages"] = []
 
 # Sidebar options with download buttons
 with st.sidebar:
@@ -100,6 +100,9 @@ except Exception as e:
 
 st.title("IntelliGemini")
 st.caption("A Chatbot powered by Gemini")
+
+# Display the initial assistant message directly
+st.chat_message("assistant").write("How can I help you?")
 
 # Display chat messages
 for msg in st.session_state.messages:
