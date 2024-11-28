@@ -3,3 +3,5 @@ Python.code-workspace
 intelligemini.json
 firebaseconfig.json
 __pycache__
+.devcontainer
+AI-Chatbot/Test/pages/__pycache__
