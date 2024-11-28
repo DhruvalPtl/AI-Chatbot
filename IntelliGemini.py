@@ -101,7 +101,6 @@ with st.sidebar:
     # Download Chat
     with st.expander("Download Chat"):
         if st.session_state["messages"]:
-            # JSON download button
             
             def content_to_dict(content_obj):
                 if isinstance(content_obj, dict):
@@ -111,13 +110,15 @@ with st.sidebar:
                     "parts": [part.text for part in content_obj.parts],
                 }
 
-            json_data = json.dumps([content_to_dict(msg) for msg in st.session_state["messages"]], indent=4)
+            download_message = [content_to_dict(msg) for msg in st.session_state["messages"]]
+            
+            json_data = json.dumps(download_message, indent=4)
 
             # json_data = json.dumps(st.session_state["messages"], indent=4)
             st.download_button("As JSON Format", json_data, file_name="chat_history.json", mime="application/json")
-            
+                
             # CSV download button
-            df = pd.DataFrame(st.session_state["messages"])
+            df = pd.DataFrame(download_message)
             csv_data = df.to_csv(index=False)
             st.download_button("As CSV Format", csv_data, file_name="chat_history.csv", mime="text/csv")
 
@@ -147,8 +148,8 @@ st.caption("A Chatbot powered by Gemini")
 
 if "user_id" in st.session_state:
     user_id = st.session_state["user_id"]
-    db = Database()
-    chat_history = db.chat_history(user_id)
+    db = Database(user_id)
+    chat_history = db.chat_history()
     if chat_history:
             # Convert database entries to protos.Content structure
             st.session_state["messages"] = [

@@ -2,6 +2,6 @@ Python.code-workspace
 .streamlit
 intelligemini.json
 firebaseconfig.json
-__pycache__
 .devcontainer
 AI-Chatbot/Test/pages/__pycache__
+D:\Python\project-5\AI-Chatbot\__pycache__

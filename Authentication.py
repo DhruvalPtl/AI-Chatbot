@@ -17,13 +17,29 @@ with open("D:\Python\project-5\AI-Chatbot\Firebaseconfig.json") as json_file:
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 authentication = firebase.auth()
-class Database:
-    def __init__(self):
-        self.db = firebase.database()
 
-    def chat_history(self,user_id):
-        return self.db.child("users").child(user_id).child("chat_history").get().val()
-    
+
+class Database:
+    def __init__(self,user_id):
+        self.db = firebase.database()
+        self.user_id = user_id
+
+    def chat_history(self):
+        try:
+            chat_history = self.db.child("users").child(self.user_id).child("chat_history").get().val()
+                
+            if chat_history is None:
+                return []
+
+            # Assuming chat_history is a dictionary, convert it to a list of dictionaries or a desired structure
+            # Here, we're assuming it's a list-like structure where each message is stored as a dictionary
+            return chat_history
+        
+        except Exception as e:
+            # Handle exceptions (e.g., network issues, database errors)
+            print(f"Error fetching chat history: {e}")
+            return []  # Return an empty list on error
+
     def save_chat_to_database(self,user_id, messages):
         """Save chat history to Firebase Realtime Database."""
         try:
@@ -37,7 +53,6 @@ class Database:
             ]
             # Write data to the user's chat history in Firebase
             self.db.child("users").child(user_id).child("chat_history").set(chat_data)
-            st.success("Chat history saved successfully!")
         except Exception as e:
             st.error(f"Failed to save chat history: {e}")
 
