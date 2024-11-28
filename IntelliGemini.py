@@ -1,11 +1,12 @@
 import streamlit as st
 import google.generativeai as genai
 from google.generativeai import protos
+from Authentication import Authentication, logout, Database
 import json
 import pandas as pd
 
-api_key = st.secrets["API_KEY"]
-
+auth = Authentication()
+api_key = st.secrets["API_KEY"] 
 # Initialize messages in session state
 if "messages" not in st.session_state:
     # Create the initial assistant message with Part instances
@@ -17,8 +18,51 @@ if "messages" not in st.session_state:
 
 # Sidebar options with download buttons
 with st.sidebar:
+    
+    if "user_id" not in st.session_state:
+        with st.expander("Sign Up"):  
+            username = st.text_input("Username")
+            email = st.text_input("Email Address",placeholder="e.g,abc@example.com")
+            password = st.text_input("Password", type="password",placeholder="Must 6 Character long")
+            confirm_password = st.text_input("Confirm Password", type="password",placeholder="Must 6 Character long")
+            if st.button("Sign up"):
+                # Process form data
+                if not username:
+                    st.error("Please enter a username")
+                elif not email or  ("@" and ".com" not in email) :
+                    st.error("Enter email with valid format")
+                elif not password or len(password) < 6:
+                    st.error("Enter 6 or more character password")
+                elif password == confirm_password:
+                    auth.sign_up(username,email,confirm_password)
+                else:
+                    st.error("Password do not match")
+                
+        with st.expander("Login"):
+            email = st.text_input("Your Email")
+            password = st.text_input("Your Password", type="password")
+            if st.button("Login"):
+                # Process form data
+                if not email or  ("@" and ".com" not in email) :
+                    st.error("Enter email with valid format")
+                elif not password or len(password) < 6:
+                    st.error("Enter 6 or more character password")
+                elif password:
+                    auth.login(email,password)
+                    st.rerun()
+                else:
+                    st.error("Enter Email and Password")
+    else:
+        if st.button("Logout"):
+            logout()
+            for key in list(st.session_state.keys()):
+                del st.session_state[key]
+            st.rerun()
+        
+    
     st.markdown("## IntelliGemini")
     st.markdown("""
+                
     **Welcome to IntelliGemini!**
 
     Explore Gemini language models, adjust settings, and manage chat history.  
@@ -101,6 +145,22 @@ except Exception as e:
 st.title("IntelliGemini")
 st.caption("A Chatbot powered by Gemini")
 
+if "user_id" in st.session_state:
+    user_id = st.session_state["user_id"]
+    db = Database()
+    chat_history = db.chat_history(user_id)
+    if chat_history:
+            # Convert database entries to protos.Content structure
+            st.session_state["messages"] = [
+                protos.Content(
+                    parts=[protos.Part(text=part) for part in msg["parts"]],
+                    role=msg["role"]
+                )
+                for msg in chat_history
+            ]
+    else:
+        st.session_state["messages"] = []
+
 # Display chat messages
 for msg in st.session_state.messages:
     # st.chat_message(msg["role"]).write(msg["parts"])
@@ -136,7 +196,12 @@ if prompt := st.chat_input():
                 )
                 st.session_state["messages"].append(model_message)
                 st.chat_message("assistant").write(response.text)
-            
+
+                if "user_id" in st.session_state:
+                    db.save_chat_to_database(st.session_state["user_id"], st.session_state["messages"])
+                else:
+                    st.warning("Log in to save chat history.")
+                    
             except Exception as e:
                 if "429" in str(e):
                     st.warning("Quota exceeded! Please wait a few minutes or enter your own API key in the sidebar.")
