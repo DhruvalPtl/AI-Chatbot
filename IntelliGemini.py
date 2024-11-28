@@ -11,8 +11,8 @@ api_key = st.secrets["API_KEY"]
 if "messages" not in st.session_state:
     # Create the initial assistant message with Part instances
     initial_message = protos.Content(
-        parts=[protos.Part(text="How can I help you?")],
-        role="model"
+       parts=[protos.Part(text="How can I help you?")],
+       role="model"
     )
     st.session_state["messages"] = [initial_message]
 
