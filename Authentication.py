@@ -7,15 +7,35 @@ import json
 # Initialize Firebase app if not already initialized
 if not firebase_admin._apps:
     try:
-        cred = credentials.Certificate("D:\Python\project-5\AI-Chatbot\intelligemini.json")
+        firebase_config = st.secrets["firebaseapp"]
+        cred = credentials.Certificate(firebase_config)
         firebase_admin.initialize_app(cred)
     except Exception as e:
         st.error(f"Failed to initialize Firebase: {e}")
 
-with open("D:\Python\project-5\AI-Chatbot\Firebaseconfig.json") as json_file:
-    firebaseConfig = json.load(json_file)
+# with open("D:\Python\project-5\AI-Chatbot\Firebaseconfig.json") as json_file:
+#     firebaseConfig = json.load(json_file)
 
-firebase = pyrebase.initialize_app(firebaseConfig)
+apikey = st.secrets["apiKey"]
+authDomain = st.secrets["authDomain"]
+databaseURL = st.secrets["databaseURL"]
+projectId = st.secrets["projectId"]
+storageBucket = st.secrets["storageBucket"]
+messagingSenderId = st.secrets["messagingSenderId"]
+appId = st.secrets["appId"]
+measurementId = st.secrets["measurementId"]
+
+firebase = pyrebase.initialize_app(
+    {
+        "apiKey": apikey,
+        "authDomain": authDomain,
+        "databaseURL": databaseURL,
+        "storageBucket": storageBucket,
+        "projectId": projectId,
+        "messagingSenderId": messagingSenderId,
+        "appId": appId,
+        }
+)
 authentication = firebase.auth()
 
 
