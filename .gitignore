@@ -2,3 +2,4 @@ Python.code-workspace
 .streamlit
 intelligemini.json
 firebaseconfig.json
+__pycache__

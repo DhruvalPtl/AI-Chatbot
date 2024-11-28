@@ -13,18 +13,8 @@ if not firebase_admin._apps:
         firebase_admin.initialize_app(cred)
     except Exception as e:
         st.error(f"Failed to initialize Firebase: {e}")
-
-firebaseConfig = {
-    # Add your Firebase configuration here
-  "apiKey": "AIzaSyAkLgC35em3frBCN1IkFrVGrGUgNDneDUE",
-  "authDomain": "intelligemini.firebaseapp.com",
-  "databaseURL": "https://intelligemini-default-rtdb.firebaseio.com",
-  "projectId": "intelligemini",
-  "storageBucket": "intelligemini.firebasestorage.app",
-  "messagingSenderId": "694353713932",
-  "appId": "1:694353713932:web:d8639a9c8689ee6c6b4729",
-  "measurementId": "G-GZ3SE6FMR4"
-}
+with open("D:\Python\project-5\AI-Chatbot\Firebaseconfig.json") as config:
+    firebaseConfig = json.loads(config)
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 authentication = firebase.auth()

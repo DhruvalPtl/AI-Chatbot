@@ -12,7 +12,7 @@ if not firebase_admin._apps:
     except Exception as e:
         st.error(f"Failed to initialize Firebase: {e}")
 
-with open("AI-Chatbot/firebaseconfig.json") as json_file:
+with open("D:\Python\project-5\AI-Chatbot\Firebaseconfig.json") as json_file:
     firebaseConfig = json.load(json_file)
 
 firebase = pyrebase.initialize_app(firebaseConfig)
