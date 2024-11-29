@@ -4,6 +4,7 @@ from google.generativeai import protos
 from Authentication import Authentication, logout, Database
 import json
 import pandas as pd
+import time
 
 auth = Authentication()
 api_key = st.secrets["API_KEY"] 
@@ -21,10 +22,10 @@ with st.sidebar:
     
     if "user_id" not in st.session_state:
         with st.expander("Sign Up"):  
-            username = st.text_input("Username")
-            email = st.text_input("Email Address",placeholder="e.g,abc@example.com")
-            password = st.text_input("Password", type="password",placeholder="Must 6 Character long")
-            confirm_password = st.text_input("Confirm Password", type="password",placeholder="Must 6 Character long")
+            username = st.text_input("Username",value="",placeholder="yourname")
+            email = st.text_input("Email Address",placeholder="e.g,abc@example.com",value="")
+            password = st.text_input("Password", type="password",placeholder="Must 6 Character long",value="")
+            confirm_password = st.text_input("Confirm Password", type="password",placeholder="Must 6 Character long",value="")
             if st.button("Sign up"):
                 # Process form data
                 if not username:
@@ -35,6 +36,7 @@ with st.sidebar:
                     st.error("Enter 6 or more character password")
                 elif password == confirm_password:
                     auth.sign_up(username,email,confirm_password)
+                    st.success("Sign Up successfully! Login to continue")
                 else:
                     st.error("Password do not match")
                 
@@ -49,10 +51,12 @@ with st.sidebar:
                     st.error("Enter 6 or more character password")
                 elif password:
                     auth.login(email,password)
+                    time.sleep(2)
                     st.rerun()
                 else:
                     st.error("Enter Email and Password")
     else:
+        st.subheader(st.session_state["user_name"])
         if st.button("Logout"):
             logout()
             for key in list(st.session_state.keys()):

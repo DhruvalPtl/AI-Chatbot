@@ -2,7 +2,6 @@ import streamlit as st
 import firebase_admin
 from firebase_admin import credentials
 import pyrebase
-import json
 
 # Initialize Firebase app if not already initialized
 if not firebase_admin._apps:
@@ -48,7 +47,8 @@ class Database:
             self.db.child("users").child(user_id).child("chat_history").set(chat_data)
         except Exception as e:
             st.error(f"Failed to save chat history: {e}")
-
+    
+    
 class Authentication:
     def __init__(self):
         self.db = firebase.database()
@@ -77,6 +77,8 @@ class Authentication:
             return "Internal configuration error. Please contact support."
         elif "QUOTA_EXCEEDED" in error_message:
             return "Server is currently busy. Please try again later."
+        elif "INVALID_LOGIN_CREDENTIALS" in error_message:
+            return "Invalid email or password"
         else:
             return f"An error occurred: {error_message}"
             
@@ -93,8 +95,6 @@ class Authentication:
                 "email": email,
             }
             self.db.child("users").child(user_id).set(user_data)
-
-            st.success("Sign Up successfully!")
         except Exception as e:
             error_message = Authentication.handle_auth_error(str(e))
             st.error(error_message)    
