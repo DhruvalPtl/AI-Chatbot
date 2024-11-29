@@ -4,3 +4,5 @@ intelligemini.json
 firebaseconfig.json
 .devcontainer
 Test/pages/__pycache__
+*.pyc
+/__pycache__
