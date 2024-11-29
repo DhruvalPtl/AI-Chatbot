@@ -1,10 +1,18 @@
 import streamlit as st
+from PIL import Image
 import google.generativeai as genai
 from google.generativeai import protos
 from Authentication import Authentication, logout, Database
 import json
 import pandas as pd
 import time
+
+img = Image.open("icon/icon.png")
+st.set_page_config(
+    page_title="AI Model",
+    page_icon=img,
+    layout="wide",
+)
 
 auth = Authentication()
 api_key = st.secrets["API_KEY"] 
