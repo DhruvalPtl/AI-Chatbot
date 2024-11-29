@@ -9,7 +9,7 @@ import time
 
 img = Image.open("icon/icon.png")
 st.set_page_config(
-    page_title="AI Model",
+    page_title="IntelliGemini",
     page_icon=img,
     layout="wide",
 )
