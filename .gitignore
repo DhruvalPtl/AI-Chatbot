@@ -6,3 +6,4 @@ firebaseconfig.json
 Test/pages/__pycache__
 *.pyc
 /__pycache__
+__pycache__/Authentication.cpython-312.pyc

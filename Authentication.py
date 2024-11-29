@@ -27,13 +27,9 @@ class Database:
                 
             if chat_history is None:
                 return []
-
-            # Assuming chat_history is a dictionary, convert it to a list of dictionaries or a desired structure
-            # Here, we're assuming it's a list-like structure where each message is stored as a dictionary
             return chat_history
         
         except Exception as e:
-            # Handle exceptions (e.g., network issues, database errors)
             print(f"Error fetching chat history: {e}")
             return []  # Return an empty list on error
 
@@ -57,6 +53,33 @@ class Authentication:
     def __init__(self):
         self.db = firebase.database()
         
+    @staticmethod    
+    def handle_auth_error(error_message):
+        if "EMAIL_EXISTS" in error_message:
+            return "This email is already registered. Please log in."
+        elif "INVALID_EMAIL" in error_message:
+            return "The email address is badly formatted. Please enter a valid email."
+        elif "MISSING_EMAIL" in error_message:
+            return "Email address is required. Please enter your email."
+        elif "MISSING_PASSWORD" in error_message:
+            return "Password is required. Please enter your password."
+        elif "WEAK_PASSWORD" in error_message:
+            return "The password is too weak. Please use at least 6 characters."
+        elif "EMAIL_NOT_FOUND" in error_message or "USER_NOT_FOUND" in error_message:
+            return "This email is not registered. Please sign up first."
+        elif "INVALID_PASSWORD" in error_message:
+            return "The password is incorrect. Please try again."
+        elif "USER_DISABLED" in error_message:
+            return "Your account has been disabled. Please contact support."
+        elif "TOO_MANY_ATTEMPTS_TRY_LATER" in error_message:
+            return "Too many unsuccessful attempts. Please try again later."
+        elif "INVALID_API_KEY" in error_message or "API_KEY_EXPIRED" in error_message:
+            return "Internal configuration error. Please contact support."
+        elif "QUOTA_EXCEEDED" in error_message:
+            return "Server is currently busy. Please try again later."
+        else:
+            return f"An error occurred: {error_message}"
+            
     def sign_up(self,user_name,email,password):
         try:
             user = authentication.create_user_with_email_and_password(
@@ -73,8 +96,9 @@ class Authentication:
 
             st.success("Sign Up successfully!")
         except Exception as e:
-            st.error(f"An error occurred: {e}")
-
+            error_message = Authentication.handle_auth_error(str(e))
+            st.error(error_message)    
+                
     def login(self,email,password):
         try:
             user = authentication.sign_in_with_email_and_password(
@@ -97,9 +121,9 @@ class Authentication:
                 st.error("User data not found.")
                         
         except Exception as e:
-            # st.error(f"An error occurred: {e}")
-            st.error("No account found with this email address and password. Please check your email or password.")
-        
+            error_message = Authentication.handle_auth_error(str(e))
+            st.error(error_message)
+    
 def logout():
     st.session_state.clear()
     st.success("Logged out successfully!")
