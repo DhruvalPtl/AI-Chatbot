@@ -17,13 +17,9 @@ st.set_page_config(
 auth = Authentication()
 api_key = st.secrets["API_KEY"] 
 # Initialize messages in session state
+
 if "messages" not in st.session_state:
-    # Create the initial assistant message with Part instances
-    initial_message = protos.Content(
-       parts=[protos.Part(text="How can I help you?")],
-       role="model"
-    )
-    st.session_state["messages"] = [initial_message]
+    st.session_state["messages"] = []
 
 # Sidebar options with download buttons
 with st.sidebar:
@@ -135,7 +131,7 @@ with st.sidebar:
             st.download_button("As CSV Format", csv_data, file_name="chat_history.csv", mime="text/csv")
 
     if st.button("Clear Chat"):
-        st.session_state["messages"] = [protos.Content(parts=[protos.Part(text="How can I help you?")], role="model")]
+        st.session_state["messages"] = []
         st.rerun() 
         
 # Set up generation configuration
@@ -157,6 +153,8 @@ except Exception as e:
 
 st.title("IntelliGemini")
 st.caption("A Chatbot powered by Gemini")
+
+st.chat_message("assistant").write("How can I help you?")
 
 if "user_id" in st.session_state:
     user_id = st.session_state["user_id"]
