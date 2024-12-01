@@ -27,14 +27,14 @@ with st.sidebar:
     if "user_id" not in st.session_state:
         with st.expander("Sign Up"):  
             username = st.text_input("Username",value="",placeholder="yourname")
-            email = st.text_input("Email Address",placeholder="e.g,abc@example.com",value="")
+            email = st.text_input("Email Address",placeholder="abc@example.com",value="")
             password = st.text_input("Password", type="password",placeholder="Must 6 Character long",value="")
             confirm_password = st.text_input("Confirm Password", type="password",placeholder="Must 6 Character long",value="")
             if st.button("Sign up"):
                 # Process form data
                 if not username:
                     st.error("Please enter a username")
-                elif not email or  ("@" and ".com" not in email) :
+                elif not email or "@" not in email or ".com" not in email:
                     st.error("Enter email with valid format")
                 elif not password or len(password) < 6:
                     st.error("Enter 6 or more character password")
