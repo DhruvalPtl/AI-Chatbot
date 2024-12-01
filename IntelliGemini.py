@@ -82,15 +82,12 @@ with st.sidebar:
             genai.configure(api_key=user_api_key)
     elif api_key:
             genai.configure(api_key=api_key)
-            st.info(
+            st.warning(
                 "✅ The API key has been provided by the developer.\n\n"
-                "Note: Chat functionality is currently limited."
+                "🔒Note: Chat functionality is currently limited.\n\n"
+                "You can get your Gemini API Key [here](https://aistudio.google.com/app/apikey)"
             )
-    else:
-        st.error("Please enter your API key")
-        # st.info("✅ API key is provided by developer")
-        st.markdown("You can create your Gemini API Key [here](https://aistudio.google.com/app/apikey)")
-    
+   
     tool = st.toggle("Code Execution Tool",False)
     if tool:
         st.write("Code Execution Tool is now active. it enables the model to generate and run Python code")
