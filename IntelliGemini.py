@@ -79,12 +79,13 @@ with st.sidebar:
 
     user_api_key = st.text_input("Enter your Gemini API key",type="password")
     if user_api_key:
-        genai.configure(api_key=user_api_key)
+            genai.configure(api_key=user_api_key)
     elif api_key:
-        genai.configure(api_key=api_key)
-        st.info(f"✅ API key is provided by developer\n\n"
-                f"Requests per minute for Flash is 5 and Pro is 2"
-                )
+            genai.configure(api_key=api_key)
+            st.info(
+                "✅ The API key has been provided by the developer.\n\n"
+                "Note: Chat functionality is currently limited."
+            )
     else:
         st.error("Please enter your API key")
         # st.info("✅ API key is provided by developer")
@@ -180,45 +181,45 @@ for msg in st.session_state.messages:
     
 if prompt := st.chat_input():
     # Append user input as a Content object with Part instance
-    if prompt and (user_api_key or api_key):
-        user_message = protos.Content(
-            parts=[protos.Part(text=prompt)],
-            role="user"
-        )
-        st.session_state["messages"].append(user_message)
-        st.chat_message("user").write(prompt)
-               
-        if "chat" in st.session_state:
+    user_message = protos.Content(
+        parts=[protos.Part(text=prompt)],
+        role="user"
+    )
+    st.session_state["messages"].append(user_message)
+    st.chat_message("user").write(prompt)
+            
+    if "chat" in st.session_state:
+        try:
+            # Concatenate messages into a single string
+            full_prompt = "\n".join([
+                "".join([part.text for part in msg.parts])
+                for msg in st.session_state.messages
+            ])
+            full_prompt += "\n" + prompt
+            
+            # Send the user message and get a response
             try:
-                # Concatenate messages into a single string
-                full_prompt = "\n".join([
-                    "".join([part.text for part in msg.parts])
-                    for msg in st.session_state.messages
-                ])
-                full_prompt += "\n" + prompt
-                
-                # Send the user message and get a response
                 response = st.session_state.chat.send_message(full_prompt)
-                
-                # Create the assistant's response as a Content object with Part instance
+            # Create the assistant's response as a Content object with Part instance
                 model_message = protos.Content(
                     parts=[protos.Part(text=response.text)],
                     role="model"
                 )
                 st.session_state["messages"].append(model_message)
                 st.chat_message("assistant").write(response.text)
-
-                if "user_id" in st.session_state:
-                    db.save_chat_to_database(st.session_state["user_id"], st.session_state["messages"])
-                else:
-                    st.warning("Log in to save chat history.")
-                    
             except Exception as e:
-                if "429" in str(e):
-                    st.warning("Quota exceeded! Please wait a few minutes or enter your own API key in the sidebar.")
-                else:
-                    st.error(f"An error occurred: {e}")
-        else:
-                st.error("Failed to start chat message")
+                if "API_KEY_INVALID" in str(e):
+                    st.error("Invalid API key")
+                    
+            if "user_id" in st.session_state:
+                db.save_chat_to_database(st.session_state["user_id"], st.session_state["messages"])
+            else:
+                st.warning("Log in to save chat history.")
+                
+        except Exception as e:
+            if "429" in str(e):
+                st.warning("Quota exceeded! Please wait a few minutes or enter your own API key in the sidebar.")
+            else:
+                st.error(f"An error occurred: {e}")
     else:
-        st.error("Please provide a API key in left sidebar")
+            st.error("Failed to start chat message")
