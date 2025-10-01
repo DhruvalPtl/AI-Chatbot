@@ -14,6 +14,7 @@
 - **File Download:** Download the chat history in both JSON and CSV formats for record-keeping or further analysis.
 - **Code Execution Tool:** Enable a feature that allows the model to generate and execute Python code directly within the chat. This is useful for more advanced interactions and allows for code generation or troubleshooting.
 - **API Key Management:** Users can enter their own Gemini API key or use the provided key to make requests to the Gemini API. The app is designed to work both for general users and developers.
+- **MNIST Dataset Utilities:** Built-in utilities to create, load, and save datasets in MNIST format for machine learning projects. See [MNIST_UTILS_README.md](MNIST_UTILS_README.md) for details.
 
 ## Installation
 

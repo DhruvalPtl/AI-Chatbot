@@ -15,5 +15,6 @@ google-generativeai==0.8.3
 google-resumable-media==2.7.2
 googleapis-common-protos==1.65.0
 numpy==1.26.4
+Pillow==10.4.0
 Pyrebase4==4.8.0
 setuptools
