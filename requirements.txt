@@ -17,3 +17,4 @@ googleapis-common-protos==1.65.0
 numpy==1.26.4
 Pyrebase4==4.8.0
 setuptools
+opencv-python-headless==4.8.1.78

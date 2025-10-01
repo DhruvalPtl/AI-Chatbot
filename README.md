@@ -2,6 +2,39 @@
 
 **IntelliGemini** is a powerful and interactive chatbot application that utilizes the Gemini language model to generate human-like responses. Built with Streamlit, the app offers a seamless and customizable interface where users can engage in dynamic conversations with an AI model. It supports multiple configuration options to personalize interactions and allows users to download chat history for record-keeping.
 
+## 🆕 New: Gujarati Handwritten Digit Extractor
+
+This repository now includes a specialized tool for extracting and preprocessing Gujarati handwritten digits from scanned sheets. The digit extractor is designed for creating machine learning datasets from handwritten digit grids.
+
+### Features:
+- Automatic 10×10 grid detection
+- Individual digit extraction with border removal
+- Advanced preprocessing (grayscale, binarization, noise removal)
+- Centering and padding for consistent output
+- Configurable output size (default: 256×256 pixels)
+- Automatic metadata generation
+
+**[📖 Read the full Digit Extractor documentation](DIGIT_EXTRACTOR_README.md)**
+
+### Quick Start - Digit Extractor:
+
+```bash
+# Install dependencies
+pip install opencv-python-headless numpy
+
+# Create a sample test image
+python create_sample_image.py --output P001_test2_cropped.jpg
+
+# Extract digits
+python digit_extractor.py --input P001_test2_cropped.jpg --participant P001 --output ./output
+
+# Run example workflow
+python example_workflow.py
+
+# Run tests
+python test_digit_extractor.py
+```
+
 ## Features
 
 - **Interactive Chat Interface:** Communicate with the Gemini language model in a conversational way. The model responds to user inputs in natural language.

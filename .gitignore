@@ -6,4 +6,12 @@ firebaseconfig.json
 Test/pages/__pycache__
 *.pyc
 /__pycache__
-__pycache__/Authentication.cpython-312.pyc
+__pycache__/
+
+# Digit extractor output and test files
+output/
+P001_test2_cropped.jpg
+*_test*.jpg
+*_cropped.jpg
+test_sample.jpg
+test_output/
