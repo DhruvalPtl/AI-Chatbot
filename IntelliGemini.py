@@ -95,7 +95,7 @@ with st.sidebar:
     else:
         tools = None
         
-    model_name = st.selectbox("Choose a gemini Model",("gemini-1.5-flash","gemini-1.5-flash-8b","gemini-1.5-pro"))
+    model_name = st.selectbox("Choose a gemini Model",("gemini-3-flash-preview","gemini-flash-latest","gemini-flash-lite-latest","gemini-3.1-pro-preview"))
     with st.expander("Output Control Parameter"):
         temp = st.slider("🌡Temperature",0.0,2.0,1.0,0.05)
         top_p = st.slider("Top P",0.0,1.0,.95,.05)
