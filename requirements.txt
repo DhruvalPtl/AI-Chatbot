@@ -1,4 +1,4 @@
-streamlit==1.40.1
+streamlit
 extra-streamlit-components==0.1.71
 firebase==4.0.1
 firebase-admin==6.6.0
@@ -15,5 +15,5 @@ google-generativeai==0.8.3
 google-resumable-media==2.7.2
 googleapis-common-protos==1.65.0
 numpy==1.26.4
-Pyrebase4==4.8.0
+Pyrebase4
 setuptools
